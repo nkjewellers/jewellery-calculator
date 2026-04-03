@@ -22,14 +22,13 @@ export default function Calculator() {
 
   const [history, setHistory] = useState<any[]>([]);
 
-  // 🎤 VOICE FUNCTION
   const startVoice = (setValue:any) => {
     const SpeechRecognition =
       (window as any).SpeechRecognition ||
       (window as any).webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      alert("Voice not supported in this browser");
+      alert("Voice not supported");
       return;
     }
 
@@ -38,13 +37,9 @@ export default function Calculator() {
 
     recognition.onresult = (event:any) => {
       let text = event.results[0][0].transcript;
-
       text = text.replace("point", ".").replace(/\s/g, "");
-
       const num = parseFloat(text);
-      if (!isNaN(num)) {
-        setValue(num);
-      }
+      if (!isNaN(num)) setValue(num);
     };
 
     recognition.start();
@@ -102,8 +97,8 @@ export default function Calculator() {
     setHistory([entry, ...history.slice(0,4)]);
   };
 
+  // ✅ RESET FIX (GOLD RATE SAFE)
   const resetAll = () => {
-    setRate24(0);
     setGross(0);
     setStone(0);
     setDiamondCt(0);
@@ -122,9 +117,7 @@ export default function Calculator() {
 
       <Image src="/logo.png" alt="logo" width={180} height={100} style={{display:"block", margin:"auto"}} />
 
-      <h1 style={{fontSize:22,fontWeight:"bold",textAlign:"center"}}>
-        Jewellery Calculator
-      </h1>
+      <h1 style={{textAlign:"center"}}>Jewellery Calculator</h1>
 
       <p>24K Gold Rate</p>
       <div style={{display:"flex"}}>
@@ -136,7 +129,6 @@ export default function Calculator() {
       </div>
 
       <p>Select Gold Purity</p>
-
       <div style={{display:"flex"}}>
         {[24,22,20,18,14].map(c=>(
           <button key={c}
@@ -153,9 +145,9 @@ export default function Calculator() {
         ))}
       </div>
 
-      <div style={{display:"flex", marginTop:5}}>
+      <div style={{display:"flex"}}>
         {[24,22,20,18,14].map(c=>(
-          <div key={c} style={{flex:1, textAlign:"center"}}>
+          <div key={c} style={{flex:1,textAlign:"center"}}>
             ₹{getRate(c).toFixed(0)}
           </div>
         ))}
@@ -179,7 +171,7 @@ export default function Calculator() {
         <button onClick={()=>startVoice(setStone)}>🎤</button>
       </div>
 
-      <p>Diamond Weight (ct)</p>
+      <p>Diamond Weight</p>
       <div style={{display:"flex"}}>
         <input type="number" step="0.001"
           value={diamondCt === 0 ? "" : diamondCt}
@@ -188,57 +180,28 @@ export default function Calculator() {
         <button onClick={()=>startVoice(setDiamondCt)}>🎤</button>
       </div>
 
-      <p>Diamond Code</p>
-      <input value={diamondCode}
-        onChange={(e)=>setDiamondCode(e.target.value)}
+      <p>Polish</p>
+      <input type="number" step="0.001"
+        value={polish === 0 ? "" : polish}
+        onChange={(e)=>setPolish(parseFloat(e.target.value) || 0)}
         style={{width:"100%",padding:10}}/>
 
-      <p>Diamond Profit</p>
-      <div style={{display:"flex"}}>
-        <input type="number" step="0.001"
-          value={diamondProfit === 0 ? "" : diamondProfit}
-          onChange={(e)=>setDiamondProfit(parseFloat(e.target.value) || 0)}
-          style={{flex:1,padding:10}}/>
-        <button onClick={()=>startVoice(setDiamondProfit)}>🎤</button>
-      </div>
-
-      <p>Polish</p>
-      <div style={{display:"flex"}}>
-        <input type="number" step="0.001"
-          value={polish === 0 ? "" : polish}
-          onChange={(e)=>setPolish(parseFloat(e.target.value) || 0)}
-          style={{flex:1,padding:10}}/>
-        <select onChange={(e)=>setPolishType(e.target.value)}>
-          <option value="percent">%</option>
-          <option value="flat">₹</option>
-        </select>
-        <button onClick={()=>startVoice(setPolish)}>🎤</button>
-      </div>
-
       <p>Making</p>
-      <div style={{display:"flex"}}>
-        <input type="number" step="0.001"
-          value={making === 0 ? "" : making}
-          onChange={(e)=>setMaking(parseFloat(e.target.value) || 0)}
-          style={{flex:1,padding:10}}/>
-        <select onChange={(e)=>setMakingType(e.target.value)}>
-          <option value="perGram">/gm</option>
-          <option value="percent">%</option>
-          <option value="flat">₹</option>
-        </select>
-        <button onClick={()=>startVoice(setMaking)}>🎤</button>
-      </div>
+      <input type="number" step="0.001"
+        value={making === 0 ? "" : making}
+        onChange={(e)=>setMaking(parseFloat(e.target.value) || 0)}
+        style={{width:"100%",padding:10}}/>
 
-      <button onClick={saveHistory} style={{width:"100%",marginTop:10,background:"green",color:"white",padding:10}}>
+      <button onClick={saveHistory} style={{width:"100%",background:"green",color:"white",padding:10}}>
         Save
       </button>
 
-      <button onClick={resetAll} style={{width:"100%",marginTop:5,background:"red",color:"white",padding:10}}>
+      <button onClick={resetAll} style={{width:"100%",background:"red",color:"white",padding:10}}>
         Reset
       </button>
 
-      <button onClick={handlePrint} style={{width:"100%",marginTop:5,background:"blue",color:"white",padding:10}}>
-        Print / PDF
+      <button onClick={handlePrint} style={{width:"100%",background:"blue",color:"white",padding:10}}>
+        Print
       </button>
 
       <div style={{background:"black",color:"white",padding:10,textAlign:"center"}}>
