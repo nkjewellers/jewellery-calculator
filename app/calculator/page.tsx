@@ -22,26 +22,6 @@ export default function Calculator() {
 
   const [history, setHistory] = useState<any[]>([]);
 
-  const startVoice = (setValue:any) => {
-    const SpeechRecognition =
-      (window as any).SpeechRecognition ||
-      (window as any).webkitSpeechRecognition;
-
-    if (!SpeechRecognition) return;
-
-    const rec = new SpeechRecognition();
-    rec.lang = "en-IN";
-
-    rec.onresult = (e:any)=>{
-      let t = e.results[0][0].transcript;
-      t = t.replace("point",".").replace(/\s/g,"");
-      const num = parseFloat(t);
-      if(!isNaN(num)) setValue(num);
-    };
-
-    rec.start();
-  };
-
   const purity:any = {24:1,22:0.93,20:0.86,18:0.78,14:0.62};
   const getRate = (ct:number)=>rate24*purity[ct];
 
@@ -80,7 +60,6 @@ export default function Calculator() {
     setMaking(0);
   };
 
-  // 🔥 PRINT + SHARE
   const handlePrint = async () => {
 
     const text = `
@@ -179,14 +158,14 @@ ${text}
         style={{width:"100%",padding:10,marginBottom:10}}
       />
 
-      {/* ✅ FIXED BUTTONS */}
+      {/* ✅ BUTTONS FIXED */}
       <button onClick={resetAll}
-        style={{width:"100%",background:"red",color:"white",padding:12,marginBottom:10}}>
+        style={{width:"100%",background:"red",color:"white",padding:14,fontSize:16,marginBottom:10}}>
         Reset
       </button>
 
       <button onClick={handlePrint}
-        style={{width:"100%",background:"black",color:"white",padding:12}}>
+        style={{width:"100%",background:"black",color:"white",padding:14,fontSize:16}}>
         Print / PDF / Share
       </button>
 
