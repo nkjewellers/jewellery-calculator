@@ -21,15 +21,17 @@ export default function Calculator() {
 
   const [history, setHistory] = useState<any[]>([]);
 
-  const purity:any = {24:1,22:0.93,20:0.86,18:0.78,14:0.62};
+  const purity:any = {
+    24:1,
+    22:0.93,
+    20:0.86,
+    18:0.78,
+    14:0.62
+  };
 
-  // CT PRICE
-  const rate22 = rate24 * 0.93;
-  const rate20 = rate24 * 0.86;
-  const rate18 = rate24 * 0.78;
-  const rate14 = rate24 * 0.62;
+  const getRate = (ct:number) => rate24 * purity[ct];
 
-  const rate = rate24 * purity[carat];
+  const rate = getRate(carat);
   const ratePerGram = rate / 10;
 
   const diamondGram = diamondCt * 0.2;
@@ -106,33 +108,35 @@ export default function Calculator() {
         />
       </div>
 
-      {/* CT SELECT */}
+      {/* CT SELECT + PRICE UNDER EACH */}
       <div>
         <p className="font-semibold text-lg">Select Gold Purity</p>
 
-        <div className="flex gap-2 flex-wrap">
+        <div className="grid grid-cols-5 gap-2 text-center">
           {[24,22,20,18,14].map(c=>(
-            <button
-              key={c}
-              onClick={()=>setCarat(c)}
-              className={`px-4 py-2 rounded text-lg border ${
-                carat===c
-                ? "bg-black text-white"
-                : "bg-gray-200"
-              }`}
-            >
-              {c}K
-            </button>
+            <div key={c}>
+              <button
+                onClick={()=>setCarat(c)}
+                className={`w-full py-2 rounded text-lg border ${
+                  carat===c
+                  ? "bg-black text-white"
+                  : "bg-gray-200"
+                }`}
+              >
+                {c}K
+              </button>
+
+              {/* ✅ PRICE UNDER EACH CT */}
+              <p className="text-sm mt-1">
+                ₹{getRate(c).toFixed(0)}
+              </p>
+            </div>
           ))}
         </div>
 
-        {/* ✅ CT PRICE BELOW (MOBILE FRIENDLY) */}
-        <div className="mt-2 text-sm">
-          <p>22K: ₹{rate22.toFixed(0)}</p>
-          <p>20K: ₹{rate20.toFixed(0)}</p>
-          <p>18K: ₹{rate18.toFixed(0)}</p>
-          <p>14K: ₹{rate14.toFixed(0)}</p>
-        </div>
+        <p className="mt-2 text-sm">
+          Selected: <b>{carat}K</b>
+        </p>
       </div>
 
       {/* WEIGHTS */}
