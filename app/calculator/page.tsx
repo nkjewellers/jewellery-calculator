@@ -12,6 +12,7 @@ export default function Calculator() {
   const [stone, setStone] = useState(0);
   const [diamondCt, setDiamondCt] = useState(0);
   const [diamondCode, setDiamondCode] = useState("");
+  const [diamondProfit, setDiamondProfit] = useState(0); // ✅ added back
 
   const [polish, setPolish] = useState(0);
   const [polishType, setPolishType] = useState("percent");
@@ -22,11 +23,7 @@ export default function Calculator() {
   const [history, setHistory] = useState<any[]>([]);
 
   const purity:any = {
-    24:1,
-    22:0.93,
-    20:0.86,
-    18:0.78,
-    14:0.62
+    24:1,22:0.93,20:0.86,18:0.78,14:0.62
   };
 
   const getRate = (ct:number) => rate24 * purity[ct];
@@ -53,6 +50,7 @@ export default function Calculator() {
     makingValue = making;
   }
 
+  // DIAMOND
   const map:any = {
     k:1,g:2,c:3,h:4,o:5,i:6,t:7,r:8,a:9,m:0
   };
@@ -63,10 +61,12 @@ export default function Calculator() {
   }
 
   const diamondRate = num ? parseInt(num+"00") : 0;
-  const diamondTotal = diamondRate * diamondCt;
 
-  const total = goldValue + makingValue + diamondTotal; // without GST
-  const final = total + total*0.03; // with GST
+  // ✅ PROFIT AUTO ADD
+  const diamondTotal = (diamondRate * diamondCt) + diamondProfit;
+
+  const total = goldValue + makingValue + diamondTotal;
+  const final = total + total*0.03;
 
   const saveHistory = () => {
     const entry = {
@@ -83,8 +83,14 @@ export default function Calculator() {
     setStone(0);
     setDiamondCt(0);
     setDiamondCode("");
+    setDiamondProfit(0);
     setPolish(0);
     setMaking(0);
+  };
+
+  // ✅ PRINT FUNCTION
+  const handlePrint = () => {
+    window.print();
   };
 
   return (
@@ -98,11 +104,11 @@ export default function Calculator() {
         style={{display:"block", margin:"auto"}}
       />
 
-      <h1 style={{fontSize:22, fontWeight:"bold", textAlign:"center"}}>
+      <h1 style={{fontSize:22,fontWeight:"bold",textAlign:"center"}}>
         Jewellery Calculator
       </h1>
 
-      <p>24K Gold Rate (per 10g)</p>
+      <p>24K Gold Rate</p>
       <input value={rate24} onChange={(e)=>setRate24(+e.target.value)} style={{width:"100%",padding:10}}/>
 
       <p>Select Gold Purity</p>
@@ -131,12 +137,10 @@ export default function Calculator() {
         ))}
       </div>
 
-      <p>Selected: {carat}K</p>
-
-      <p>Gross Weight (gm)</p>
+      <p>Gross Weight</p>
       <input value={gross} onChange={(e)=>setGross(+e.target.value)} style={{width:"100%",padding:10}}/>
 
-      <p>Stone Weight (gm)</p>
+      <p>Stone Weight</p>
       <input value={stone} onChange={(e)=>setStone(+e.target.value)} style={{width:"100%",padding:10}}/>
 
       <p>Diamond Weight (ct)</p>
@@ -144,6 +148,10 @@ export default function Calculator() {
 
       <p>Diamond Code</p>
       <input value={diamondCode} onChange={(e)=>setDiamondCode(e.target.value)} style={{width:"100%",padding:10}}/>
+
+      {/* ✅ DIAMOND PROFIT INPUT */}
+      <p>Diamond Profit</p>
+      <input value={diamondProfit} onChange={(e)=>setDiamondProfit(+e.target.value)} style={{width:"100%",padding:10}}/>
 
       <p>Polish</p>
       <div style={{display:"flex"}}>
@@ -172,14 +180,14 @@ export default function Calculator() {
         Reset
       </button>
 
-      {/* ✅ ONLY CHANGE HERE */}
+      {/* ✅ PRINT BUTTON */}
+      <button onClick={handlePrint} style={{width:"100%",marginTop:5,background:"blue",color:"white",padding:10}}>
+        Print / PDF
+      </button>
+
       <div style={{background:"black",color:"white",padding:10,textAlign:"center"}}>
-        <p style={{fontSize:14}}>
-          Without GST: ₹{total.toFixed(0)}
-        </p>
-        <h2 style={{fontSize:20,fontWeight:"bold"}}>
-          With GST: ₹{final.toFixed(0)}
-        </h2>
+        <p>Without GST: ₹{total.toFixed(0)}</p>
+        <h2>With GST: ₹{final.toFixed(0)}</h2>
       </div>
 
       <p>Last 5 Transactions</p>
