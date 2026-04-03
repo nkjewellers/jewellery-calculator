@@ -12,7 +12,7 @@ export default function Calculator() {
   const [stone, setStone] = useState(0);
   const [diamondCt, setDiamondCt] = useState(0);
   const [diamondCode, setDiamondCode] = useState("");
-  const [diamondProfit, setDiamondProfit] = useState(0); // ✅ added back
+  const [diamondProfit, setDiamondProfit] = useState(0);
 
   const [polish, setPolish] = useState(0);
   const [polishType, setPolishType] = useState("percent");
@@ -50,7 +50,6 @@ export default function Calculator() {
     makingValue = making;
   }
 
-  // DIAMOND
   const map:any = {
     k:1,g:2,c:3,h:4,o:5,i:6,t:7,r:8,a:9,m:0
   };
@@ -61,8 +60,6 @@ export default function Calculator() {
   }
 
   const diamondRate = num ? parseInt(num+"00") : 0;
-
-  // ✅ PROFIT AUTO ADD
   const diamondTotal = (diamondRate * diamondCt) + diamondProfit;
 
   const total = goldValue + makingValue + diamondTotal;
@@ -88,7 +85,6 @@ export default function Calculator() {
     setMaking(0);
   };
 
-  // ✅ PRINT FUNCTION
   const handlePrint = () => {
     window.print();
   };
@@ -109,7 +105,10 @@ export default function Calculator() {
       </h1>
 
       <p>24K Gold Rate</p>
-      <input value={rate24} onChange={(e)=>setRate24(+e.target.value)} style={{width:"100%",padding:10}}/>
+      <input type="number" step="0.01"
+        value={rate24}
+        onChange={(e)=>setRate24(parseFloat(e.target.value) || 0)}
+        style={{width:"100%",padding:10}}/>
 
       <p>Select Gold Purity</p>
 
@@ -138,24 +137,40 @@ export default function Calculator() {
       </div>
 
       <p>Gross Weight</p>
-      <input value={gross} onChange={(e)=>setGross(+e.target.value)} style={{width:"100%",padding:10}}/>
+      <input type="number" step="0.01"
+        value={gross}
+        onChange={(e)=>setGross(parseFloat(e.target.value) || 0)}
+        style={{width:"100%",padding:10}}/>
 
       <p>Stone Weight</p>
-      <input value={stone} onChange={(e)=>setStone(+e.target.value)} style={{width:"100%",padding:10}}/>
+      <input type="number" step="0.01"
+        value={stone}
+        onChange={(e)=>setStone(parseFloat(e.target.value) || 0)}
+        style={{width:"100%",padding:10}}/>
 
       <p>Diamond Weight (ct)</p>
-      <input value={diamondCt} onChange={(e)=>setDiamondCt(+e.target.value)} style={{width:"100%",padding:10}}/>
+      <input type="number" step="0.01"
+        value={diamondCt}
+        onChange={(e)=>setDiamondCt(parseFloat(e.target.value) || 0)}
+        style={{width:"100%",padding:10}}/>
 
       <p>Diamond Code</p>
-      <input value={diamondCode} onChange={(e)=>setDiamondCode(e.target.value)} style={{width:"100%",padding:10}}/>
+      <input value={diamondCode}
+        onChange={(e)=>setDiamondCode(e.target.value)}
+        style={{width:"100%",padding:10}}/>
 
-      {/* ✅ DIAMOND PROFIT INPUT */}
       <p>Diamond Profit</p>
-      <input value={diamondProfit} onChange={(e)=>setDiamondProfit(+e.target.value)} style={{width:"100%",padding:10}}/>
+      <input type="number" step="0.01"
+        value={diamondProfit}
+        onChange={(e)=>setDiamondProfit(parseFloat(e.target.value) || 0)}
+        style={{width:"100%",padding:10}}/>
 
       <p>Polish</p>
       <div style={{display:"flex"}}>
-        <input value={polish} onChange={(e)=>setPolish(+e.target.value)} style={{flex:1,padding:10}}/>
+        <input type="number" step="0.01"
+          value={polish}
+          onChange={(e)=>setPolish(parseFloat(e.target.value) || 0)}
+          style={{flex:1,padding:10}}/>
         <select onChange={(e)=>setPolishType(e.target.value)}>
           <option value="percent">%</option>
           <option value="flat">₹</option>
@@ -164,7 +179,10 @@ export default function Calculator() {
 
       <p>Making</p>
       <div style={{display:"flex"}}>
-        <input value={making} onChange={(e)=>setMaking(+e.target.value)} style={{flex:1,padding:10}}/>
+        <input type="number" step="0.01"
+          value={making}
+          onChange={(e)=>setMaking(parseFloat(e.target.value) || 0)}
+          style={{flex:1,padding:10}}/>
         <select onChange={(e)=>setMakingType(e.target.value)}>
           <option value="perGram">/gm</option>
           <option value="percent">%</option>
@@ -180,7 +198,6 @@ export default function Calculator() {
         Reset
       </button>
 
-      {/* ✅ PRINT BUTTON */}
       <button onClick={handlePrint} style={{width:"100%",marginTop:5,background:"blue",color:"white",padding:10}}>
         Print / PDF
       </button>
