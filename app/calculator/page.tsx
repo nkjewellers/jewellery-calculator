@@ -80,7 +80,7 @@ export default function Calculator() {
     setMaking(0);
   };
 
-  // 🔥 FINAL PRINT + PDF + SHARE
+  // 🔥 PRINT + SHARE
   const handlePrint = async () => {
 
     const text = `
@@ -98,7 +98,6 @@ FINAL: ₹${final.toFixed(0)}
 Thank You 🙏
 `;
 
-    // SHARE (mobile)
     if (navigator.share) {
       try {
         await navigator.share({
@@ -109,7 +108,6 @@ Thank You 🙏
       } catch {}
     }
 
-    // PRINT / PDF fallback
     const win = window.open("", "", "width=300,height=600");
 
     win.document.write(`
@@ -131,37 +129,62 @@ ${text}
 
       <input type="number" value={rate24||""}
         onChange={(e)=>setRate24(parseFloat(e.target.value)||0)}
-        placeholder="24K Rate"/>
+        placeholder="24K Rate"
+        style={{width:"100%",padding:10,marginBottom:10}}
+      />
 
-      <div style={{display:"flex"}}>
+      <div style={{display:"flex",marginBottom:10}}>
         {[24,22,20,18,14].map(c=>(
-          <button key={c} onClick={()=>setCarat(c)}>{c}K</button>
+          <button key={c}
+            onClick={()=>setCarat(c)}
+            style={{
+              flex:1,
+              margin:2,
+              padding:10,
+              background: carat===c ? "black" : "#ddd",
+              color: carat===c ? "white" : "black"
+            }}>
+            {c}K
+          </button>
         ))}
       </div>
 
       <input type="number" step="0.001" value={gross||""}
         onChange={(e)=>setGross(parseFloat(e.target.value)||0)}
-        placeholder="Gross"/>
+        placeholder="Gross"
+        style={{width:"100%",padding:10,marginBottom:10}}
+      />
 
       <input type="number" step="0.001" value={stone||""}
         onChange={(e)=>setStone(parseFloat(e.target.value)||0)}
-        placeholder="Stone"/>
+        placeholder="Stone"
+        style={{width:"100%",padding:10,marginBottom:10}}
+      />
 
       <input type="number" step="0.001" value={diamondCt||""}
         onChange={(e)=>setDiamondCt(parseFloat(e.target.value)||0)}
-        placeholder="Diamond Ct"/>
+        placeholder="Diamond Ct"
+        style={{width:"100%",padding:10,marginBottom:10}}
+      />
 
       <input value={diamondCode}
         onChange={(e)=>setDiamondCode(e.target.value)}
-        placeholder="Diamond Code"/>
+        placeholder="Diamond Code"
+        style={{width:"100%",padding:10,marginBottom:10}}
+      />
 
       <input type="number" value={diamondProfit||""}
         onChange={(e)=>setDiamondProfit(parseFloat(e.target.value)||0)}
-        placeholder="Diamond Profit"/>
+        placeholder="Diamond Profit"
+        style={{width:"100%",padding:10,marginBottom:10}}
+      />
 
-      <button onClick={resetAll}>Reset</button>
+      {/* ✅ FIXED BUTTONS */}
+      <button onClick={resetAll}
+        style={{width:"100%",background:"red",color:"white",padding:12,marginBottom:10}}>
+        Reset
+      </button>
 
-      {/* 🔥 FINAL BUTTON */}
       <button onClick={handlePrint}
         style={{width:"100%",background:"black",color:"white",padding:12}}>
         Print / PDF / Share
