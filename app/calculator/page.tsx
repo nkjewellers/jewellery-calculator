@@ -108,28 +108,32 @@ export default function Calculator() {
         />
       </div>
 
-      {/* CT SELECT + PRICE UNDER EACH */}
+      {/* CT SELECT + INLINE PRICE */}
       <div>
         <p className="font-semibold text-lg">Select Gold Purity</p>
 
-        <div className="grid grid-cols-5 gap-2 text-center">
+        {/* CT BUTTONS */}
+        <div className="flex justify-between">
           {[24,22,20,18,14].map(c=>(
-            <div key={c}>
-              <button
-                onClick={()=>setCarat(c)}
-                className={`w-full py-2 rounded text-lg border ${
-                  carat===c
-                  ? "bg-black text-white"
-                  : "bg-gray-200"
-                }`}
-              >
-                {c}K
-              </button>
+            <button
+              key={c}
+              onClick={()=>setCarat(c)}
+              className={`flex-1 mx-1 py-2 rounded text-lg border ${
+                carat===c
+                ? "bg-black text-white"
+                : "bg-gray-200"
+              }`}
+            >
+              {c}K
+            </button>
+          ))}
+        </div>
 
-              {/* ✅ PRICE UNDER EACH CT */}
-              <p className="text-sm mt-1">
-                ₹{getRate(c).toFixed(0)}
-              </p>
+        {/* PRICE LINE */}
+        <div className="flex justify-between mt-1 text-sm text-center">
+          {[24,22,20,18,14].map(c=>(
+            <div key={c} className="flex-1">
+              ₹{getRate(c).toFixed(0)}
             </div>
           ))}
         </div>
