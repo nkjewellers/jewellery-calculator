@@ -63,7 +63,6 @@ export default function Calculator() {
   const total = goldValue + makingValue + diamondTotal;
   const final = total + total*0.03;
 
-  // SAVE HISTORY
   const saveHistory = () => {
     const entry = {
       price: final.toFixed(0),
@@ -73,7 +72,6 @@ export default function Calculator() {
     setHistory([entry, ...history.slice(0,4)]);
   };
 
-  // RESET
   const resetAll = () => {
     setRate24(0);
     setGross(0);
@@ -95,11 +93,9 @@ export default function Calculator() {
       {/* GOLD RATE */}
       <div>
         <p className="font-semibold text-lg">24K Gold Rate (per 10g)</p>
-        <input
-          value={rate24}
+        <input value={rate24}
           onChange={(e)=>setRate24(+e.target.value)}
-          className="w-full p-3 text-lg border rounded"
-        />
+          className="w-full p-3 text-lg border rounded"/>
       </div>
 
       {/* CT SELECT */}
@@ -110,10 +106,10 @@ export default function Calculator() {
             <button
               key={c}
               onClick={()=>setCarat(c)}
-              className={`px-4 py-2 rounded text-lg ${
+              className={`px-4 py-2 rounded text-lg border ${
                 carat===c
                 ? "bg-black text-white"
-                : "bg-gray-200"
+                : "bg-gray-200 text-black"
               }`}
             >
               {c}K
@@ -159,28 +155,32 @@ export default function Calculator() {
       </div>
 
       {/* POLISH */}
-      <div className="flex gap-2">
-        <input placeholder="Polish"
-          value={polish}
-          onChange={(e)=>setPolish(+e.target.value)}
-          className="w-full p-3 text-lg border rounded"/>
-        <select onChange={(e)=>setPolishType(e.target.value)}>
-          <option value="percent">%</option>
-          <option value="flat">₹</option>
-        </select>
+      <div>
+        <p className="font-semibold text-lg">Polish</p>
+        <div className="flex gap-2">
+          <input value={polish}
+            onChange={(e)=>setPolish(+e.target.value)}
+            className="w-full p-3 text-lg border rounded"/>
+          <select onChange={(e)=>setPolishType(e.target.value)}>
+            <option value="percent">%</option>
+            <option value="flat">₹</option>
+          </select>
+        </div>
       </div>
 
       {/* MAKING */}
-      <div className="flex gap-2">
-        <input placeholder="Making"
-          value={making}
-          onChange={(e)=>setMaking(+e.target.value)}
-          className="w-full p-3 text-lg border rounded"/>
-        <select onChange={(e)=>setMakingType(e.target.value)}>
-          <option value="perGram">/gm</option>
-          <option value="percent">%</option>
-          <option value="flat">₹</option>
-        </select>
+      <div>
+        <p className="font-semibold text-lg">Making</p>
+        <div className="flex gap-2">
+          <input value={making}
+            onChange={(e)=>setMaking(+e.target.value)}
+            className="w-full p-3 text-lg border rounded"/>
+          <select onChange={(e)=>setMakingType(e.target.value)}>
+            <option value="perGram">/gm</option>
+            <option value="percent">%</option>
+            <option value="flat">₹</option>
+          </select>
+        </div>
       </div>
 
       {/* BUTTONS */}
