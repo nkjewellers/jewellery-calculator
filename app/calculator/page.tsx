@@ -31,7 +31,6 @@ export default function Calculator() {
     i:6,t:7,r:8,a:9,m:0
   };
 
-  // 🔹 Rates
   const rate22 = rate24 * 0.93;
   const rate20 = rate24 * 0.86;
   const rate18 = rate24 * 0.78;
@@ -41,19 +40,15 @@ export default function Calculator() {
   const ratePerGram = rate10 / 10;
 
   const diamondGram = diamondCt * 0.2;
-
   const net = Math.max(0, gross - stone - diamondGram);
 
-  // 🔹 POLISH
   let polishValue = polishType === "percent"
     ? (net * polish) / 100
     : polish;
 
   const totalGoldWeight = net + polishValue;
-
   const goldValue = totalGoldWeight * ratePerGram;
 
-  // 🔹 MAKING
   let goldMakingValue = 0;
   if (makingType === "perGram") {
     goldMakingValue = net * goldMaking;
@@ -63,7 +58,6 @@ export default function Calculator() {
     goldMakingValue = goldMaking;
   }
 
-  // 🔹 DIAMOND
   const cleanCode = diamondCode.trim().toLowerCase();
 
   let num = "";
@@ -75,14 +69,12 @@ export default function Calculator() {
   const diamondCost = diamondRate * diamondCt;
   const diamondTotal = diamondCost + diamondProfit;
 
-  // 🔹 FINAL
   const totalWithoutGST =
     goldValue + goldMakingValue + diamondTotal;
 
   const gst = totalWithoutGST * 0.03;
   const final = totalWithoutGST + gst;
 
-  // 🔹 HISTORY
   const saveHistory = () => {
     const newEntry = {
       final: final.toFixed(0),
@@ -104,23 +96,19 @@ export default function Calculator() {
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto space-y-4">
+    <div className="p-4 max-w-md mx-auto space-y-4 bg-black text-white min-h-screen">
 
       <h1 className="text-3xl font-bold text-center">
         💎 Jewellery Calculator
       </h1>
 
-      {/* GOLD RATE */}
       <div>
-        <p className="font-semibold">24K Gold Rate</p>
-        <input
-          value={rate24}
+        <p>24K Gold Rate</p>
+        <input value={rate24}
           onChange={(e)=>setRate24(+e.target.value)}
-          className="w-full p-4 border rounded"
-        />
+          className="w-full p-4 rounded bg-gray-900 border border-gray-600"/>
       </div>
 
-      {/* AUTO RATES */}
       <div className="grid grid-cols-4 text-center text-sm">
         <p>22K: {rate22.toFixed(0)}</p>
         <p>20K: {rate20.toFixed(0)}</p>
@@ -128,119 +116,91 @@ export default function Calculator() {
         <p>14K: {rate14.toFixed(0)}</p>
       </div>
 
-      {/* CARAT */}
+      {/* CT BUTTON FIX */}
       <div className="grid grid-cols-5 gap-2">
         {[24,22,20,18,14].map(c => (
-          <button key={c}
-            onClick={()=>setCarat(c)}
-            className={`p-2 ${
-              carat===c ? "bg-black text-white" : "bg-gray-200"
-            }`}>
+          <button
+            key={c}
+            onClick={() => setCarat(c)}
+            className={`p-3 rounded font-semibold ${
+              carat === c
+                ? "bg-white text-black border-2 border-white"
+                : "bg-gray-800 text-white border border-gray-600"
+            }`}
+          >
             {c}K
           </button>
         ))}
       </div>
 
-      {/* WEIGHTS */}
-      <div>
-        <p className="font-semibold">Gross Weight (gm)</p>
-        <input value={gross}
-          onChange={(e)=>setGross(+e.target.value)}
-          className="w-full p-4 border rounded"/>
+      <input placeholder="Gross Weight"
+        value={gross}
+        onChange={(e)=>setGross(+e.target.value)}
+        className="w-full p-4 rounded bg-gray-900 border border-gray-600"/>
+
+      <input placeholder="Stone Weight"
+        value={stone}
+        onChange={(e)=>setStone(+e.target.value)}
+        className="w-full p-4 rounded bg-gray-900 border border-gray-600"/>
+
+      <input placeholder="Diamond Weight (ct)"
+        value={diamondCt}
+        onChange={(e)=>setDiamondCt(+e.target.value)}
+        className="w-full p-4 rounded bg-gray-900 border border-gray-600"/>
+
+      <input placeholder="Diamond Code"
+        value={diamondCode}
+        onChange={(e)=>setDiamondCode(e.target.value)}
+        className="w-full p-4 rounded bg-gray-900 border border-gray-600"/>
+
+      <input placeholder="Diamond Profit"
+        value={diamondProfit}
+        onChange={(e)=>setDiamondProfit(+e.target.value)}
+        className="w-full p-4 rounded bg-gray-900 border border-gray-600"/>
+
+      <div className="flex gap-2">
+        <input placeholder="Polish"
+          value={polish}
+          onChange={(e)=>setPolish(+e.target.value)}
+          className="w-full p-4 rounded bg-gray-900 border border-gray-600"/>
+        <select
+          onChange={(e)=>setPolishType(e.target.value)}
+          className="p-4 rounded bg-gray-900 border border-gray-600">
+          <option value="percent">%</option>
+          <option value="flat">₹</option>
+        </select>
       </div>
 
-      <div>
-        <p className="font-semibold">Stone Weight (gm)</p>
-        <input value={stone}
-          onChange={(e)=>setStone(+e.target.value)}
-          className="w-full p-4 border rounded"/>
+      <div className="flex gap-2">
+        <input placeholder="Gold Making"
+          value={goldMaking}
+          onChange={(e)=>setGoldMaking(+e.target.value)}
+          className="w-full p-4 rounded bg-gray-900 border border-gray-600"/>
+        <select
+          onChange={(e)=>setMakingType(e.target.value)}
+          className="p-4 rounded bg-gray-900 border border-gray-600">
+          <option value="perGram">/gm</option>
+          <option value="percent">%</option>
+          <option value="flat">₹</option>
+        </select>
       </div>
 
-      <div>
-        <p className="font-semibold">Diamond Weight (ct)</p>
-        <input value={diamondCt}
-          onChange={(e)=>setDiamondCt(+e.target.value)}
-          className="w-full p-4 border rounded"/>
-      </div>
-
-      {/* DIAMOND */}
-      <div>
-        <p className="font-semibold">Diamond Code</p>
-        <input value={diamondCode}
-          onChange={(e)=>setDiamondCode(e.target.value)}
-          className="w-full p-4 border rounded"/>
-      </div>
-
-      <div>
-        <p className="font-semibold">Diamond Profit (₹)</p>
-        <input value={diamondProfit}
-          onChange={(e)=>setDiamondProfit(+e.target.value)}
-          className="w-full p-4 border rounded"/>
-      </div>
-
-      {/* POLISH */}
-      <div>
-        <p className="font-semibold">Polish</p>
-        <div className="flex gap-2">
-          <input value={polish}
-            onChange={(e)=>setPolish(+e.target.value)}
-            className="w-full p-4 border rounded"/>
-          <select
-            onChange={(e)=>setPolishType(e.target.value)}
-            className="p-4 border rounded">
-            <option value="percent">%</option>
-            <option value="flat">₹</option>
-          </select>
-        </div>
-      </div>
-
-      {/* MAKING */}
-      <div>
-        <p className="font-semibold">Gold Making</p>
-        <div className="flex gap-2">
-          <input value={goldMaking}
-            onChange={(e)=>setGoldMaking(+e.target.value)}
-            className="w-full p-4 border rounded"/>
-          <select
-            onChange={(e)=>setMakingType(e.target.value)}
-            className="p-4 border rounded">
-            <option value="perGram">/gm</option>
-            <option value="percent">%</option>
-            <option value="flat">₹</option>
-          </select>
-        </div>
-      </div>
-
-      {/* BUTTONS */}
       <div className="flex gap-2">
         <button onClick={saveHistory}
-          className="w-full bg-green-600 text-white p-3 rounded">
+          className="w-full bg-green-600 p-3 rounded">
           Save
         </button>
 
         <button onClick={resetAll}
-          className="w-full bg-red-600 text-white p-3 rounded">
+          className="w-full bg-red-600 p-3 rounded">
           Reset
         </button>
       </div>
 
-      {/* RESULT */}
-      <div className="bg-black text-white p-4 rounded text-center space-y-1">
-        <p>Net: {net.toFixed(2)} gm</p>
-        <p>Total Gold: {totalGoldWeight.toFixed(2)} gm</p>
+      <div className="bg-white text-black p-4 rounded text-center">
         <p className="text-3xl font-bold">
           ₹{final.toFixed(0)}
         </p>
-      </div>
-
-      {/* HISTORY */}
-      <div className="bg-gray-100 p-3 rounded">
-        <h2 className="font-bold">Last 5</h2>
-        {history.map((h, i)=>(
-          <p key={i}>
-            ₹{h.final} | {h.wt}gm | {h.ct}ct
-          </p>
-        ))}
       </div>
 
     </div>
