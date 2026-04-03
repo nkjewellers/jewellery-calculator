@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image"; // ✅ sirf ye add kiya hai
+import Image from "next/image";
 
 export default function Calculator() {
 
@@ -65,8 +65,8 @@ export default function Calculator() {
   const diamondRate = num ? parseInt(num+"00") : 0;
   const diamondTotal = diamondRate * diamondCt;
 
-  const total = goldValue + makingValue + diamondTotal;
-  const final = total + total*0.03;
+  const total = goldValue + makingValue + diamondTotal; // without GST
+  const final = total + total*0.03; // with GST
 
   const saveHistory = () => {
     const entry = {
@@ -90,7 +90,6 @@ export default function Calculator() {
   return (
     <div style={{padding:16, maxWidth:400, margin:"auto"}}>
 
-      {/* ✅ LOGO FIXED */}
       <Image 
         src="/logo.png" 
         alt="logo"
@@ -173,9 +172,15 @@ export default function Calculator() {
         Reset
       </button>
 
-      <h2 style={{background:"black",color:"white",padding:10,textAlign:"center"}}>
-        ₹{final.toFixed(0)}
-      </h2>
+      {/* ✅ ONLY CHANGE HERE */}
+      <div style={{background:"black",color:"white",padding:10,textAlign:"center"}}>
+        <p style={{fontSize:14}}>
+          Without GST: ₹{total.toFixed(0)}
+        </p>
+        <h2 style={{fontSize:20,fontWeight:"bold"}}>
+          With GST: ₹{final.toFixed(0)}
+        </h2>
+      </div>
 
       <p>Last 5 Transactions</p>
       {history.map((h,i)=>(
