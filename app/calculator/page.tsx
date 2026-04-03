@@ -20,10 +20,11 @@ export default function Calculator() {
   const [making, setMaking] = useState(0);
   const [makingType, setMakingType] = useState("perGram");
 
-  const [history, setHistory] = useState<any[]>([]);
+  // ✅ FIX (NO ANY[])
+  const [history, setHistory] = useState([]);
 
-  const purity:any = {24:1,22:0.93,20:0.86,18:0.78,14:0.62};
-  const getRate = (ct:number)=>rate24*purity[ct];
+  const purity = {24:1,22:0.93,20:0.86,18:0.78,14:0.62};
+  const getRate = (ct:number)=>rate24*(purity as any)[ct];
 
   const rate = getRate(carat)/10;
 
@@ -38,10 +39,10 @@ export default function Calculator() {
   else if(makingType==="percent") makingValue = (goldValue*making)/100;
   else makingValue = making;
 
-  const map:any = {k:1,g:2,c:3,h:4,o:5,i:6,t:7,r:8,a:9,m:0};
+  const map = {k:1,g:2,c:3,h:4,o:5,i:6,t:7,r:8,a:9,m:0};
   let num="";
   for(let ch of diamondCode.toLowerCase()){
-    if(map[ch]!=undefined) num+=map[ch];
+    if((map as any)[ch]!=undefined) num+=(map as any)[ch];
   }
 
   const diamondRate = num ? parseInt(num+"00") : 0;
@@ -158,7 +159,6 @@ ${text}
         style={{width:"100%",padding:10,marginBottom:10}}
       />
 
-      {/* ✅ BUTTONS FIXED */}
       <button onClick={resetAll}
         style={{width:"100%",background:"red",color:"white",padding:14,fontSize:16,marginBottom:10}}>
         Reset
