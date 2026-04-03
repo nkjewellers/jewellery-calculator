@@ -11,7 +11,6 @@ export default function Calculator() {
   const [stone, setStone] = useState(0);
   const [diamondCt, setDiamondCt] = useState(0);
   const [diamondCode, setDiamondCode] = useState("");
-  const [diamondProfit, setDiamondProfit] = useState(0);
 
   const [polish, setPolish] = useState(0);
   const [polishType, setPolishType] = useState("percent");
@@ -37,6 +36,7 @@ export default function Calculator() {
   const diamondGram = diamondCt * 0.2;
   const net = Math.max(0, gross - stone - diamondGram);
 
+  // POLISH
   let polishValue = polishType === "percent"
     ? (net * polish) / 100
     : polish;
@@ -44,6 +44,7 @@ export default function Calculator() {
   const totalGoldWeight = net + polishValue;
   const goldValue = totalGoldWeight * ratePerGram;
 
+  // MAKING
   let makingValue = 0;
   if (makingType === "perGram") {
     makingValue = net * making;
@@ -53,6 +54,7 @@ export default function Calculator() {
     makingValue = making;
   }
 
+  // DIAMOND CODE
   const map:any = {
     k:1,g:2,c:3,h:4,o:5,i:6,t:7,r:8,a:9,m:0
   };
@@ -63,7 +65,7 @@ export default function Calculator() {
   }
 
   const diamondRate = num ? parseInt(num+"00") : 0;
-  const diamondTotal = diamondRate * diamondCt + diamondProfit;
+  const diamondTotal = diamondRate * diamondCt;
 
   const total = goldValue + makingValue + diamondTotal;
   const final = total + total*0.03;
@@ -83,7 +85,6 @@ export default function Calculator() {
     setStone(0);
     setDiamondCt(0);
     setDiamondCode("");
-    setDiamondProfit(0);
     setPolish(0);
     setMaking(0);
   };
@@ -91,17 +92,20 @@ export default function Calculator() {
   return (
     <div style={{padding:16, maxWidth:400, margin:"auto"}}>
 
-      <h1 style={{fontSize:24, fontWeight:"bold", textAlign:"center"}}>
-        💎 Jewellery Calculator
+      {/* ✅ LOGO */}
+      <img src="/logo.png" alt="logo" style={{width:"100%", marginBottom:10}} />
+
+      <h1 style={{fontSize:22, fontWeight:"bold", textAlign:"center"}}>
+        Jewellery Calculator
       </h1>
 
       <p>24K Gold Rate (per 10g)</p>
       <input value={rate24} onChange={(e)=>setRate24(+e.target.value)} style={{width:"100%",padding:10}}/>
 
-      <p style={{marginTop:10}}>Select Gold Purity</p>
+      <p>Select Gold Purity</p>
 
-      {/* ✅ BUTTON ROW */}
-      <div style={{display:"flex", justifyContent:"space-between"}}>
+      {/* CT BUTTONS */}
+      <div style={{display:"flex"}}>
         {[24,22,20,18,14].map(c=>(
           <button key={c}
             onClick={()=>setCarat(c)}
@@ -117,8 +121,8 @@ export default function Calculator() {
         ))}
       </div>
 
-      {/* ✅ PRICE ROW FIX */}
-      <div style={{display:"flex", justifyContent:"space-between", marginTop:5}}>
+      {/* PRICE LINE */}
+      <div style={{display:"flex", marginTop:5}}>
         {[24,22,20,18,14].map(c=>(
           <div key={c} style={{flex:1, textAlign:"center"}}>
             ₹{getRate(c).toFixed(0)}
@@ -140,15 +144,28 @@ export default function Calculator() {
       <p>Diamond Code</p>
       <input value={diamondCode} onChange={(e)=>setDiamondCode(e.target.value)} style={{width:"100%",padding:10}}/>
 
-      <p>Diamond Profit</p>
-      <input value={diamondProfit} onChange={(e)=>setDiamondProfit(+e.target.value)} style={{width:"100%",padding:10}}/>
-
+      {/* POLISH */}
       <p>Polish</p>
-      <input value={polish} onChange={(e)=>setPolish(+e.target.value)} style={{width:"100%",padding:10}}/>
+      <div style={{display:"flex"}}>
+        <input value={polish} onChange={(e)=>setPolish(+e.target.value)} style={{flex:1,padding:10}}/>
+        <select onChange={(e)=>setPolishType(e.target.value)}>
+          <option value="percent">%</option>
+          <option value="flat">₹</option>
+        </select>
+      </div>
 
+      {/* MAKING */}
       <p>Making</p>
-      <input value={making} onChange={(e)=>setMaking(+e.target.value)} style={{width:"100%",padding:10}}/>
+      <div style={{display:"flex"}}>
+        <input value={making} onChange={(e)=>setMaking(+e.target.value)} style={{flex:1,padding:10}}/>
+        <select onChange={(e)=>setMakingType(e.target.value)}>
+          <option value="perGram">/gm</option>
+          <option value="percent">%</option>
+          <option value="flat">₹</option>
+        </select>
+      </div>
 
+      {/* BUTTONS */}
       <button onClick={saveHistory} style={{width:"100%",marginTop:10,background:"green",color:"white",padding:10}}>
         Save
       </button>
@@ -157,10 +174,12 @@ export default function Calculator() {
         Reset
       </button>
 
+      {/* RESULT */}
       <h2 style={{background:"black",color:"white",padding:10,textAlign:"center"}}>
         ₹{final.toFixed(0)}
       </h2>
 
+      {/* HISTORY */}
       <p>Last 5 Transactions</p>
       {history.map((h,i)=>(
         <p key={i}>{h.price} | {h.wt}gm | {h.ct}K</p>
