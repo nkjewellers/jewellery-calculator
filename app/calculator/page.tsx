@@ -105,8 +105,8 @@ export default function Calculator() {
       </h1>
 
       <p>24K Gold Rate</p>
-      <input type="number" step="0.01"
-        value={rate24}
+      <input type="number" step="0.001"
+        value={rate24 === 0 ? "" : rate24}
         onChange={(e)=>setRate24(parseFloat(e.target.value) || 0)}
         style={{width:"100%",padding:10}}/>
 
@@ -137,20 +137,20 @@ export default function Calculator() {
       </div>
 
       <p>Gross Weight</p>
-      <input type="number" step="0.01"
-        value={gross}
+      <input type="number" step="0.001"
+        value={gross === 0 ? "" : gross}
         onChange={(e)=>setGross(parseFloat(e.target.value) || 0)}
         style={{width:"100%",padding:10}}/>
 
       <p>Stone Weight</p>
-      <input type="number" step="0.01"
-        value={stone}
+      <input type="number" step="0.001"
+        value={stone === 0 ? "" : stone}
         onChange={(e)=>setStone(parseFloat(e.target.value) || 0)}
         style={{width:"100%",padding:10}}/>
 
       <p>Diamond Weight (ct)</p>
-      <input type="number" step="0.01"
-        value={diamondCt}
+      <input type="number" step="0.001"
+        value={diamondCt === 0 ? "" : diamondCt}
         onChange={(e)=>setDiamondCt(parseFloat(e.target.value) || 0)}
         style={{width:"100%",padding:10}}/>
 
@@ -160,15 +160,15 @@ export default function Calculator() {
         style={{width:"100%",padding:10}}/>
 
       <p>Diamond Profit</p>
-      <input type="number" step="0.01"
-        value={diamondProfit}
+      <input type="number" step="0.001"
+        value={diamondProfit === 0 ? "" : diamondProfit}
         onChange={(e)=>setDiamondProfit(parseFloat(e.target.value) || 0)}
         style={{width:"100%",padding:10}}/>
 
       <p>Polish</p>
       <div style={{display:"flex"}}>
-        <input type="number" step="0.01"
-          value={polish}
+        <input type="number" step="0.001"
+          value={polish === 0 ? "" : polish}
           onChange={(e)=>setPolish(parseFloat(e.target.value) || 0)}
           style={{flex:1,padding:10}}/>
         <select onChange={(e)=>setPolishType(e.target.value)}>
@@ -179,8 +179,8 @@ export default function Calculator() {
 
       <p>Making</p>
       <div style={{display:"flex"}}>
-        <input type="number" step="0.01"
-          value={making}
+        <input type="number" step="0.001"
+          value={making === 0 ? "" : making}
           onChange={(e)=>setMaking(parseFloat(e.target.value) || 0)}
           style={{flex:1,padding:10}}/>
         <select onChange={(e)=>setMakingType(e.target.value)}>
