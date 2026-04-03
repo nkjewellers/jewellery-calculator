@@ -22,22 +22,20 @@ export default function Calculator() {
 
   const [history, setHistory] = useState<any[]>([]);
 
+  // 🎤 VOICE
   const startVoice = (setValue:any) => {
     const SpeechRecognition =
       (window as any).SpeechRecognition ||
       (window as any).webkitSpeechRecognition;
 
-    if (!SpeechRecognition) {
-      alert("Voice not supported");
-      return;
-    }
+    if (!SpeechRecognition) return alert("Voice not supported");
 
     const recognition = new SpeechRecognition();
     recognition.lang = "en-IN";
 
-    recognition.onresult = (event:any) => {
-      let text = event.results[0][0].transcript;
-      text = text.replace("point", ".").replace(/\s/g, "");
+    recognition.onresult = (e:any) => {
+      let text = e.results[0][0].transcript;
+      text = text.replace("point",".").replace(/\s/g,"");
       const num = parseFloat(text);
       if (!isNaN(num)) setValue(num);
     };
@@ -45,60 +43,43 @@ export default function Calculator() {
     recognition.start();
   };
 
-  const purity:any = {
-    24:1,22:0.93,20:0.86,18:0.78,14:0.62
-  };
+  const purity:any = {24:1,22:0.93,20:0.86,18:0.78,14:0.62};
+  const getRate = (ct:number)=>rate24*purity[ct];
 
-  const getRate = (ct:number) => rate24 * purity[ct];
+  const rate = getRate(carat)/10;
 
-  const rate = getRate(carat);
-  const ratePerGram = rate / 10;
+  const diamondGram = diamondCt*0.2;
+  const net = Math.max(0, gross-stone-diamondGram);
 
-  const diamondGram = diamondCt * 0.2;
-  const net = Math.max(0, gross - stone - diamondGram);
+  const polishValue =
+    polishType==="percent" ? (net*polish)/100 : polish;
 
-  let polishValue = polishType === "percent"
-    ? (net * polish) / 100
-    : polish;
-
-  const totalGoldWeight = net + polishValue;
-  const goldValue = totalGoldWeight * ratePerGram;
+  const goldValue = (net+polishValue)*rate;
 
   let makingValue = 0;
-  if (makingType === "perGram") {
-    makingValue = net * making;
-  } else if (makingType === "percent") {
-    makingValue = (goldValue * making) / 100;
-  } else {
-    makingValue = making;
-  }
+  if(makingType==="perGram") makingValue = net*making;
+  else if(makingType==="percent") makingValue = (goldValue*making)/100;
+  else makingValue = making;
 
-  const map:any = {
-    k:1,g:2,c:3,h:4,o:5,i:6,t:7,r:8,a:9,m:0
-  };
-
+  // diamond code logic
+  const map:any = {k:1,g:2,c:3,h:4,o:5,i:6,t:7,r:8,a:9,m:0};
   let num="";
   for(let ch of diamondCode.toLowerCase()){
-    if(map[ch]!==undefined) num+=map[ch];
+    if(map[ch]!=undefined) num+=map[ch];
   }
 
   const diamondRate = num ? parseInt(num+"00") : 0;
-  const diamondTotal = (diamondRate * diamondCt) + diamondProfit;
+  const diamondTotal = (diamondRate*diamondCt)+diamondProfit;
 
-  const total = goldValue + makingValue + diamondTotal;
+  const total = goldValue+makingValue+diamondTotal;
   const final = total + total*0.03;
 
-  const saveHistory = () => {
-    const entry = {
-      price: final.toFixed(0),
-      wt: gross,
-      ct: carat
-    };
-    setHistory([entry, ...history.slice(0,4)]);
+  const saveHistory = ()=>{
+    setHistory([{price:final.toFixed(0),wt:gross,ct:carat},...history.slice(0,4)]);
   };
 
-  // ✅ RESET FIX (GOLD RATE SAFE)
-  const resetAll = () => {
+  // ✅ RESET FIX (gold rate safe)
+  const resetAll = ()=>{
     setGross(0);
     setStone(0);
     setDiamondCt(0);
@@ -108,22 +89,18 @@ export default function Calculator() {
     setMaking(0);
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
-
   return (
-    <div style={{padding:16, maxWidth:400, margin:"auto"}}>
+    <div style={{padding:16,maxWidth:400,margin:"auto"}}>
 
-      <Image src="/logo.png" alt="logo" width={180} height={100} style={{display:"block", margin:"auto"}} />
+      <Image src="/logo.png" alt="logo" width={180} height={100} style={{margin:"auto",display:"block"}}/>
 
-      <h1 style={{textAlign:"center"}}>Jewellery Calculator</h1>
+      <h2 style={{textAlign:"center"}}>Jewellery Calculator</h2>
 
       <p>24K Gold Rate</p>
       <div style={{display:"flex"}}>
         <input type="number" step="0.001"
-          value={rate24 === 0 ? "" : rate24}
-          onChange={(e)=>setRate24(parseFloat(e.target.value) || 0)}
+          value={rate24||""}
+          onChange={(e)=>setRate24(parseFloat(e.target.value)||0)}
           style={{flex:1,padding:10}}/>
         <button onClick={()=>startVoice(setRate24)}>🎤</button>
       </div>
@@ -134,11 +111,9 @@ export default function Calculator() {
           <button key={c}
             onClick={()=>setCarat(c)}
             style={{
-              flex:1,
-              margin:2,
-              padding:8,
-              background: carat===c ? "black" : "#ddd",
-              color: carat===c ? "white" : "black"
+              flex:1,margin:2,padding:8,
+              background:carat===c?"black":"#ddd",
+              color:carat===c?"white":"black"
             }}>
             {c}K
           </button>
@@ -156,8 +131,8 @@ export default function Calculator() {
       <p>Gross Weight</p>
       <div style={{display:"flex"}}>
         <input type="number" step="0.001"
-          value={gross === 0 ? "" : gross}
-          onChange={(e)=>setGross(parseFloat(e.target.value) || 0)}
+          value={gross||""}
+          onChange={(e)=>setGross(parseFloat(e.target.value)||0)}
           style={{flex:1,padding:10}}/>
         <button onClick={()=>startVoice(setGross)}>🎤</button>
       </div>
@@ -165,44 +140,59 @@ export default function Calculator() {
       <p>Stone Weight</p>
       <div style={{display:"flex"}}>
         <input type="number" step="0.001"
-          value={stone === 0 ? "" : stone}
-          onChange={(e)=>setStone(parseFloat(e.target.value) || 0)}
+          value={stone||""}
+          onChange={(e)=>setStone(parseFloat(e.target.value)||0)}
           style={{flex:1,padding:10}}/>
         <button onClick={()=>startVoice(setStone)}>🎤</button>
       </div>
 
-      <p>Diamond Weight</p>
+      <p>Diamond Weight (ct)</p>
       <div style={{display:"flex"}}>
         <input type="number" step="0.001"
-          value={diamondCt === 0 ? "" : diamondCt}
-          onChange={(e)=>setDiamondCt(parseFloat(e.target.value) || 0)}
+          value={diamondCt||""}
+          onChange={(e)=>setDiamondCt(parseFloat(e.target.value)||0)}
           style={{flex:1,padding:10}}/>
         <button onClick={()=>startVoice(setDiamondCt)}>🎤</button>
       </div>
 
-      <p>Polish</p>
-      <input type="number" step="0.001"
-        value={polish === 0 ? "" : polish}
-        onChange={(e)=>setPolish(parseFloat(e.target.value) || 0)}
+      <p>Diamond Code</p>
+      <input value={diamondCode}
+        onChange={(e)=>setDiamondCode(e.target.value)}
         style={{width:"100%",padding:10}}/>
+
+      <p>Diamond Profit</p>
+      <input type="number" step="0.001"
+        value={diamondProfit||""}
+        onChange={(e)=>setDiamondProfit(parseFloat(e.target.value)||0)}
+        style={{width:"100%",padding:10}}/>
+
+      <p>Polish</p>
+      <div style={{display:"flex"}}>
+        <input type="number" step="0.001"
+          value={polish||""}
+          onChange={(e)=>setPolish(parseFloat(e.target.value)||0)}
+          style={{flex:1,padding:10}}/>
+        <select onChange={(e)=>setPolishType(e.target.value)}>
+          <option value="percent">%</option>
+          <option value="flat">₹</option>
+        </select>
+      </div>
 
       <p>Making</p>
-      <input type="number" step="0.001"
-        value={making === 0 ? "" : making}
-        onChange={(e)=>setMaking(parseFloat(e.target.value) || 0)}
-        style={{width:"100%",padding:10}}/>
+      <div style={{display:"flex"}}>
+        <input type="number" step="0.001"
+          value={making||""}
+          onChange={(e)=>setMaking(parseFloat(e.target.value)||0)}
+          style={{flex:1,padding:10}}/>
+        <select onChange={(e)=>setMakingType(e.target.value)}>
+          <option value="perGram">/gm</option>
+          <option value="percent">%</option>
+          <option value="flat">₹</option>
+        </select>
+      </div>
 
-      <button onClick={saveHistory} style={{width:"100%",background:"green",color:"white",padding:10}}>
-        Save
-      </button>
-
-      <button onClick={resetAll} style={{width:"100%",background:"red",color:"white",padding:10}}>
-        Reset
-      </button>
-
-      <button onClick={handlePrint} style={{width:"100%",background:"blue",color:"white",padding:10}}>
-        Print
-      </button>
+      <button onClick={saveHistory} style={{width:"100%",background:"green",color:"white",padding:10}}>Save</button>
+      <button onClick={resetAll} style={{width:"100%",background:"red",color:"white",padding:10}}>Reset</button>
 
       <div style={{background:"black",color:"white",padding:10,textAlign:"center"}}>
         <p>Without GST: ₹{total.toFixed(0)}</p>
