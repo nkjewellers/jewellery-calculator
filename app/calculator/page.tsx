@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image"; // ✅ sirf ye add kiya hai
 
 export default function Calculator() {
 
@@ -36,7 +37,6 @@ export default function Calculator() {
   const diamondGram = diamondCt * 0.2;
   const net = Math.max(0, gross - stone - diamondGram);
 
-  // POLISH
   let polishValue = polishType === "percent"
     ? (net * polish) / 100
     : polish;
@@ -44,7 +44,6 @@ export default function Calculator() {
   const totalGoldWeight = net + polishValue;
   const goldValue = totalGoldWeight * ratePerGram;
 
-  // MAKING
   let makingValue = 0;
   if (makingType === "perGram") {
     makingValue = net * making;
@@ -54,7 +53,6 @@ export default function Calculator() {
     makingValue = making;
   }
 
-  // DIAMOND CODE
   const map:any = {
     k:1,g:2,c:3,h:4,o:5,i:6,t:7,r:8,a:9,m:0
   };
@@ -92,8 +90,14 @@ export default function Calculator() {
   return (
     <div style={{padding:16, maxWidth:400, margin:"auto"}}>
 
-      {/* ✅ LOGO */}
-      <img src="/logo.png" alt="logo" style={{width:"100%", marginBottom:10}} />
+      {/* ✅ LOGO FIXED */}
+      <Image 
+        src="/logo.png" 
+        alt="logo"
+        width={180} 
+        height={100}
+        style={{display:"block", margin:"auto"}}
+      />
 
       <h1 style={{fontSize:22, fontWeight:"bold", textAlign:"center"}}>
         Jewellery Calculator
@@ -104,7 +108,6 @@ export default function Calculator() {
 
       <p>Select Gold Purity</p>
 
-      {/* CT BUTTONS */}
       <div style={{display:"flex"}}>
         {[24,22,20,18,14].map(c=>(
           <button key={c}
@@ -121,7 +124,6 @@ export default function Calculator() {
         ))}
       </div>
 
-      {/* PRICE LINE */}
       <div style={{display:"flex", marginTop:5}}>
         {[24,22,20,18,14].map(c=>(
           <div key={c} style={{flex:1, textAlign:"center"}}>
@@ -144,7 +146,6 @@ export default function Calculator() {
       <p>Diamond Code</p>
       <input value={diamondCode} onChange={(e)=>setDiamondCode(e.target.value)} style={{width:"100%",padding:10}}/>
 
-      {/* POLISH */}
       <p>Polish</p>
       <div style={{display:"flex"}}>
         <input value={polish} onChange={(e)=>setPolish(+e.target.value)} style={{flex:1,padding:10}}/>
@@ -154,7 +155,6 @@ export default function Calculator() {
         </select>
       </div>
 
-      {/* MAKING */}
       <p>Making</p>
       <div style={{display:"flex"}}>
         <input value={making} onChange={(e)=>setMaking(+e.target.value)} style={{flex:1,padding:10}}/>
@@ -165,7 +165,6 @@ export default function Calculator() {
         </select>
       </div>
 
-      {/* BUTTONS */}
       <button onClick={saveHistory} style={{width:"100%",marginTop:10,background:"green",color:"white",padding:10}}>
         Save
       </button>
@@ -174,12 +173,10 @@ export default function Calculator() {
         Reset
       </button>
 
-      {/* RESULT */}
       <h2 style={{background:"black",color:"white",padding:10,textAlign:"center"}}>
         ₹{final.toFixed(0)}
       </h2>
 
-      {/* HISTORY */}
       <p>Last 5 Transactions</p>
       {history.map((h,i)=>(
         <p key={i}>{h.price} | {h.wt}gm | {h.ct}K</p>
