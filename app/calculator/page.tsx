@@ -22,6 +22,34 @@ export default function Calculator() {
 
   const [history, setHistory] = useState<any[]>([]);
 
+  // 🎤 VOICE FUNCTION
+  const startVoice = (setValue:any) => {
+    const SpeechRecognition =
+      (window as any).SpeechRecognition ||
+      (window as any).webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert("Voice not supported in this browser");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-IN";
+
+    recognition.onresult = (event:any) => {
+      let text = event.results[0][0].transcript;
+
+      text = text.replace("point", ".").replace(/\s/g, "");
+
+      const num = parseFloat(text);
+      if (!isNaN(num)) {
+        setValue(num);
+      }
+    };
+
+    recognition.start();
+  };
+
   const purity:any = {
     24:1,22:0.93,20:0.86,18:0.78,14:0.62
   };
@@ -92,23 +120,20 @@ export default function Calculator() {
   return (
     <div style={{padding:16, maxWidth:400, margin:"auto"}}>
 
-      <Image 
-        src="/logo.png" 
-        alt="logo"
-        width={180} 
-        height={100}
-        style={{display:"block", margin:"auto"}}
-      />
+      <Image src="/logo.png" alt="logo" width={180} height={100} style={{display:"block", margin:"auto"}} />
 
       <h1 style={{fontSize:22,fontWeight:"bold",textAlign:"center"}}>
         Jewellery Calculator
       </h1>
 
       <p>24K Gold Rate</p>
-      <input type="number" step="0.001"
-        value={rate24 === 0 ? "" : rate24}
-        onChange={(e)=>setRate24(parseFloat(e.target.value) || 0)}
-        style={{width:"100%",padding:10}}/>
+      <div style={{display:"flex"}}>
+        <input type="number" step="0.001"
+          value={rate24 === 0 ? "" : rate24}
+          onChange={(e)=>setRate24(parseFloat(e.target.value) || 0)}
+          style={{flex:1,padding:10}}/>
+        <button onClick={()=>startVoice(setRate24)}>🎤</button>
+      </div>
 
       <p>Select Gold Purity</p>
 
@@ -137,22 +162,31 @@ export default function Calculator() {
       </div>
 
       <p>Gross Weight</p>
-      <input type="number" step="0.001"
-        value={gross === 0 ? "" : gross}
-        onChange={(e)=>setGross(parseFloat(e.target.value) || 0)}
-        style={{width:"100%",padding:10}}/>
+      <div style={{display:"flex"}}>
+        <input type="number" step="0.001"
+          value={gross === 0 ? "" : gross}
+          onChange={(e)=>setGross(parseFloat(e.target.value) || 0)}
+          style={{flex:1,padding:10}}/>
+        <button onClick={()=>startVoice(setGross)}>🎤</button>
+      </div>
 
       <p>Stone Weight</p>
-      <input type="number" step="0.001"
-        value={stone === 0 ? "" : stone}
-        onChange={(e)=>setStone(parseFloat(e.target.value) || 0)}
-        style={{width:"100%",padding:10}}/>
+      <div style={{display:"flex"}}>
+        <input type="number" step="0.001"
+          value={stone === 0 ? "" : stone}
+          onChange={(e)=>setStone(parseFloat(e.target.value) || 0)}
+          style={{flex:1,padding:10}}/>
+        <button onClick={()=>startVoice(setStone)}>🎤</button>
+      </div>
 
       <p>Diamond Weight (ct)</p>
-      <input type="number" step="0.001"
-        value={diamondCt === 0 ? "" : diamondCt}
-        onChange={(e)=>setDiamondCt(parseFloat(e.target.value) || 0)}
-        style={{width:"100%",padding:10}}/>
+      <div style={{display:"flex"}}>
+        <input type="number" step="0.001"
+          value={diamondCt === 0 ? "" : diamondCt}
+          onChange={(e)=>setDiamondCt(parseFloat(e.target.value) || 0)}
+          style={{flex:1,padding:10}}/>
+        <button onClick={()=>startVoice(setDiamondCt)}>🎤</button>
+      </div>
 
       <p>Diamond Code</p>
       <input value={diamondCode}
@@ -160,10 +194,13 @@ export default function Calculator() {
         style={{width:"100%",padding:10}}/>
 
       <p>Diamond Profit</p>
-      <input type="number" step="0.001"
-        value={diamondProfit === 0 ? "" : diamondProfit}
-        onChange={(e)=>setDiamondProfit(parseFloat(e.target.value) || 0)}
-        style={{width:"100%",padding:10}}/>
+      <div style={{display:"flex"}}>
+        <input type="number" step="0.001"
+          value={diamondProfit === 0 ? "" : diamondProfit}
+          onChange={(e)=>setDiamondProfit(parseFloat(e.target.value) || 0)}
+          style={{flex:1,padding:10}}/>
+        <button onClick={()=>startVoice(setDiamondProfit)}>🎤</button>
+      </div>
 
       <p>Polish</p>
       <div style={{display:"flex"}}>
@@ -175,6 +212,7 @@ export default function Calculator() {
           <option value="percent">%</option>
           <option value="flat">₹</option>
         </select>
+        <button onClick={()=>startVoice(setPolish)}>🎤</button>
       </div>
 
       <p>Making</p>
@@ -188,6 +226,7 @@ export default function Calculator() {
           <option value="percent">%</option>
           <option value="flat">₹</option>
         </select>
+        <button onClick={()=>startVoice(setMaking)}>🎤</button>
       </div>
 
       <button onClick={saveHistory} style={{width:"100%",marginTop:10,background:"green",color:"white",padding:10}}>
