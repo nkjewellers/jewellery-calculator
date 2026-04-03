@@ -5,14 +5,17 @@ import { useState } from "react";
 export default function Calculator() {
 
   const [rate24, setRate24] = useState(0);
-  const [carat, setCarat] = useState(22);
+  const [carat, setCarat] = useState(22); // ✅ default set 22K
+
   const [gross, setGross] = useState(0);
   const [stone, setStone] = useState(0);
   const [diamondCt, setDiamondCt] = useState(0);
   const [diamondCode, setDiamondCode] = useState("");
   const [diamondProfit, setDiamondProfit] = useState(0);
 
-  const purity:any = {24:1,22:0.93,20:0.86,18:0.78,14:0.62};
+  const purity:any = {
+    24:1, 22:0.93, 20:0.86, 18:0.78, 14:0.62
+  };
 
   const rate = rate24 * purity[carat];
   const ratePerGram = rate / 10;
@@ -54,24 +57,31 @@ export default function Calculator() {
         />
       </div>
 
-      {/* CT SELECT */}
+      {/* CT SELECT FIX */}
       <div>
         <p className="font-semibold text-lg">Select Gold Purity</p>
-        <div className="flex gap-2 flex-wrap">
+
+        <div className="grid grid-cols-5 gap-2">
           {[24,22,20,18,14].map(c=>(
             <button
               key={c}
+              type="button"
               onClick={()=>setCarat(c)}
-              className={`px-4 py-2 rounded text-lg ${
+              className={`p-3 text-lg rounded border active:scale-95 transition ${
                 carat===c
-                ? "bg-black text-white"
-                : "bg-gray-200"
+                ? "bg-black text-white border-black"
+                : "bg-white text-black border-gray-400"
               }`}
             >
               {c}K
             </button>
           ))}
         </div>
+
+        {/* Selected show */}
+        <p className="mt-2 text-sm">
+          Selected: <b>{carat}K</b>
+        </p>
       </div>
 
       {/* WEIGHTS */}
