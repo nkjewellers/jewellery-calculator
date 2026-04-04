@@ -89,7 +89,41 @@ export default function Calculator() {
   const saveHistory = ()=>{
     setHistory([{price: final, wt: gross, ct: carat}, ...history.slice(0,4)]);
   };
+const handlePrint = async () => {
 
+  const text = `
+ROUGH ESTIMATE
+-------------------
+Wt: ${gross}g  ${carat}K
+Gold: ₹${goldValue.toFixed(0)}
+Dia: ₹${diamondTotal.toFixed(0)}
+Making: ₹${makingValue.toFixed(0)}
+-------------------
+TOTAL: ₹${total.toFixed(0)}
+GST: ₹${(total*0.03).toFixed(0)}
+FINAL: ₹${final.toFixed(0)}
+-------------------
+NOT A BILL JUST ESTIMATE
+`;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "Jewellery Bill",
+        text: text,
+      });
+      return;
+    } catch {}
+  }
+
+  const win = window.open("", "", "width=300,height=600");
+
+  if (win) {
+    win.document.write(`<pre>${text}</pre>`);
+    win.document.close();
+    win.print();
+  }
+};
   return (
     <div style={{padding:16,maxWidth:420,margin:"auto"}}>
 
@@ -197,6 +231,18 @@ export default function Calculator() {
       <button onClick={saveHistory} style={{width:"100%",background:"green",color:"white",padding:12,marginTop:10}}>Save</button>
 
       <button onClick={resetAll} style={{width:"100%",background:"red",color:"white",padding:12}}>Reset</button>
+<button
+  onClick={handlePrint}
+  style={{
+    width: "100%",
+    background: "black",
+    color: "white",
+    padding: 12,
+    marginTop: 10
+  }}
+>
+  Print / PDF / Share
+</button>
 
       <div style={{background:"black",color:"white",padding:10,marginTop:10}}>
         <p>Without GST: ₹{total.toFixed(0)}</p>
