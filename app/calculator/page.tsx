@@ -158,6 +158,16 @@ NOT A BILL JUST ESTIMATE
           </button>
         ))}
       </div>
+</div>
+
+{/* ✅ RATE ROW */}
+<div style={{display:"flex",marginTop:5}}>
+  {[24,22,20,18,14].map(c=>(
+    <div key={c} style={{flex:1,textAlign:"center",fontSize:14}}>
+      ₹{(getRate(c)).toFixed(0)}
+    </div>
+  ))}
+</div>
 
       {/* WEIGHTS */}
       <p>Gross Weight</p>
