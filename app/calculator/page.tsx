@@ -158,7 +158,6 @@ NOT A BILL JUST ESTIMATE
           </button>
         ))}
       </div>
-</div>
 
 {/* ✅ RATE ROW */}
 <div style={{display:"flex",marginTop:5}}>
