@@ -43,9 +43,13 @@ export default function Calculator() {
     rec.start();
   };
 
-  const purity: Record<number, number> = {
-    24:1,22:0.93,20:0.86,18:0.78,14:0.62
-  };
+ const purity = {
+  24:1,
+  22:0.92,
+  20:0.84,
+  18:0.76,
+  14:0.60
+};
 
   const getRate = (ct:number)=>rate24*(purity[ct] || 0);
   const rate = getRate(carat)/10;
